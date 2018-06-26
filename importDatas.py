@@ -7,7 +7,6 @@ Created on Tue Jun 26 11:12:27 2018
 """
 
 import SQLdriver
-import re
 import time
 
 
@@ -15,19 +14,18 @@ import time
 def writeInput():
     fp = open("transactions_input.csv")
     for i, line in enumerate(fp):
-        #print(line)
-        
-        s = ',,'
-        
-        if s not in line:
-            a,b,c,d,e = line.split(',')
+       
+        if i is not 0:
             
-            print(e)
-
-           
+            s = ',,'
             
-            #print (str(e), str(eNew))
-
+            if s not in line:
+                a,b,c,d,e = line.split(',')
+                
+                e1 = int(e) / 1000
+                eNew = int(round(e1))
+                print(a + "," + b + "," + c + "," + d + "," + str(eNew)) 
+                
             
     fp.close()
 
