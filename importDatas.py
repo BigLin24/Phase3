@@ -6,7 +6,7 @@ Created on Tue Jun 26 11:12:27 2018
 @author: Kmiotek
 """
 
-import SQLdriver
+from SQLdriver import getObjectByID, writeToDatabase
 import time
 
 
@@ -18,13 +18,25 @@ def writeInput():
         if i is not 0:
             
             s = ',,'
+            r = '""'
             
-            if s not in line:
+            if s not in line and r not in line:
                 a,b,c,d,e = line.split(',')
                 
                 e1 = int(e) / 1000
                 eNew = int(round(e1))
-                print(a + "," + b + "," + c + "," + d + "," + str(eNew)) 
+                
+                
+                results = getObjectByID( 'wallet', 'PublicKey', d)
+                
+                for row in results:
+                    print('None')
+                    PublicKey = row[0]
+                    FKuserID = row[1]
+                    
+                    print (PublicKey, FKuserID )
+                    
+
                 
             
     fp.close()
