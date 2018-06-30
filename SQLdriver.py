@@ -35,6 +35,8 @@ def getFromDatabase( selectString ):
     curser = connection.cursor() 
     curser.execute( selectString )
     results = curser.fetchall()
+    for i in results:
+    	print(i)
     curser.close()
     return results
     
@@ -42,11 +44,7 @@ def getFromDatabase( selectString ):
 def getObjectByID( table, idField, idTable ):
     curser = connection.cursor() 
     curser.execute( 'SELECT * FROM ' + table + ' WHERE ' + idField + ' = "' + idTable +'"')
-    results = curser.fetchall()
-   
-    if results is None:
-        print("none")
-    
+    results = curser.fetchall()    
     curser.close()
     return results
 
