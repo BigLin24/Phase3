@@ -22,29 +22,28 @@ print("server version:", row[0])
 cursor.close()
 connection.close()"""
 
+def openConnection():
+	curser = connection.cursor()
+	return curser
 
+def closeConnection( curser ):
+	curser.close()
 
-
-def writeToDatabase( insertString ):
-    curser = connection.cursor() 
+def writeToDatabase( curser, insertString ):
     curser.execute( insertString )
     connection.commit()
-    curser.close()
+    
 
-def getFromDatabase( selectString ):
-    curser = connection.cursor() 
+def getFromDatabase( curser, selectString ):
     curser.execute( selectString )
     results = curser.fetchall()
     for i in results:
     	print(i)
-    curser.close()
     return results
     
     
-def getObjectByID( table, idField, idTable ):
-    curser = connection.cursor() 
+def getObjectByID( curser, table, idField, idTable ):
     curser.execute( 'SELECT * FROM ' + table + ' WHERE ' + idField + ' = "' + idTable +'"')
     results = curser.fetchall()    
-    curser.close()
     return results
 
