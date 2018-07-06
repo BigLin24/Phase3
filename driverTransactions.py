@@ -9,9 +9,10 @@ import SQLdriver
 
 def getAllTransactions():
     curser = openConnection()
-    sqlQuery = 'SELECT Output.FKpublicKey as Output, Input.FKpublicKey as Input, Output.satoshis \
+    sqlQuery = 'SELECT Output.FKpublicKey as Output, Input.FKpublicKey as Input, Output.satoshis, Output.FKtransactionID \
     FROM projectBitcoin.Output, projectBitcoin.Input \
-    WHERE Output.FKtransactionID = Input.FKtransactionID;'
+    WHERE Output.FKtransactionID = Input.FKtransactionID \
+    LIMIT 80000;'
     
     results = getFromDatabase( curser, sqlQuery )
     

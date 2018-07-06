@@ -27,42 +27,35 @@ edgeAttr = []
 for i in resultsWallets:
     notes.append(i[0])
     print('Add: ' + i[0])"""
- 
-resultsTransactions = getAllTransactions()
 
-for i in resultsTransactions:
-    fromWallet.append(i[0])
-    toWallet.append(i[1])
+def getDataframe():
+    resultsTransactions = getAllTransactions()
     
-    if i[2] == 0:
-        satosis = 0
-    else:
-        satosis = i[2]
+    for i in resultsTransactions:
+        n
         
+        fromWallet.append(i[0])
+        toWallet.append(i[3])
+        
+        fromWallet.append(i[0])
+        toWallet.append(i[3])
+        
+        if i[2] == 0:
+            satosis = 0
+        else:
+            satosis = i[2]
+            
+        
+        edgeAttr.append(satosis)
+        
+        '''G.add_edge(i[0], i[1], weight=(i[2] / 10000000))'''
+        print('Add: ' + i[0] + "," + i[1] + "," + str(i[2]))
     
-    edgeAttr.append(satosis)
     
-    '''G.add_edge(i[0], i[1], weight=(i[2] / 10000000))'''
-    print('Add: ' + i[0] + "," + i[1] + "," + str(i[2]))
+    df = pd.DataFrame({'from': fromWallet, 'to': toWallet, 'weight':edgeAttr})
+    return df
 
-
-df = pd.DataFrame({'from': fromWallet, 'to': toWallet, 'weight':edgeAttr})
-
-G=nx.from_pandas_edgelist(df, 'from', 'to','weight')
-
-
-# Plot it
-plt.savefig("path.png")
-nx.draw(G, with_labels=True)
-plt.show()
-
-
-"""uild a dataframe with 4 connections
-df = pd.DataFrame({ 'from':['A', 'B', 'C','A'], 'to':['D', 'A', 'E','C']})
-df
- 
-# Build your graph
-G=nx.from_pandas_edgelist(df, 'from', 'to')
-
-
-"""
+def writePlot(df):
+    G=nx.from_pandas_edgelist(df, 'from', 'to','weight')
+    nx.draw(G,node_size=0.1,with_labels=False)
+    plt.figure(figsize=(10000000,10000000))

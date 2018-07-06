@@ -19,33 +19,36 @@ Created on Thu Jul  5 17:08:24 2018
 # libraries
 import pandas as pd
 import numpy as np
-import networkx as nx
-import matplotlib.pyplot as plt
+
+from graph_tool.all import *
 
 import driverWallet
 import driverTransactions
 
-G = nx.Graph()
+def testing():
+    g = Graph()
+    v1 = g.add_vertex()
+    v2 = g.add_vertex()
+    e = g.add_edge(v1, v2)
+    graph_draw(g, vertex_text=g.vertex_index, vertex_font_size=18,output_size=(200, 200), output="two-nodes.png")
 
- 
-resultsTransactions = getAllTransactions()
 
-for i in resultsTransactions:
-    G.add_node(i[0])
-    G.add_node(i[1])
-     
-    sotasis = i[2] / 10000000
-
-    G.add_edge(i[0], i[1], {'weight': sotasis})
+def getDataframe2():
+    resultsTransactions = getAllTransactions()
+    for i in resultsTransactions:
+        G.add_node(i[0])
+        G.add_node(i[1])
+        
+        G.add_edge(i[0], i[1])
+        
+        print('Add: ' + i[0] + "," + i[1] + "," + str(i[2]))
     
-    print('Add: ' + i[0] + "," + i[1] + "," + str(i[2]))
-
-
 
 # Plot it
-plt.savefig("path.png")
-nx.draw(G, with_labels=True)
-plt.show()
+def plotIt2():
+    nx.draw(G,node_size=2,font_size=8, with_labels=False)
+    plt.show()
+    plt.savefig("path1.png")
 
 
 """uild a dataframe with 4 connections
