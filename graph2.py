@@ -4,17 +4,12 @@
 Created on Thu Jul  5 19:32:26 2018
 
 @author: biglin
+
+
+vertex_text=g.vertex_properties['name'],
+vertex_text_position=1,
+vertex_font_size=2,
 """
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Jul  5 17:08:24 2018
-
-@author: biglin
-"""
-
-
 
 # libraries
 import pandas as pd
@@ -23,7 +18,13 @@ import numpy as np
 from graph_tool.all import *
 
 import driverWallet
+import driverOutput
+import driverInput
 import driverTransactions
+import matplotlib
+
+g = Graph()
+
 
 def testing():
     g = Graph()
@@ -35,28 +36,59 @@ def testing():
 
 def getDataframe2():
     resultsTransactions = getAllTransactions()
-    for i in resultsTransactions:
-        G.add_node(i[0])
-        G.add_node(i[1])
-        
-        G.add_edge(i[0], i[1])
-        
-        print('Add: ' + i[0] + "," + i[1] + "," + str(i[2]))
+    return resultsTransactions
+
+def getDataTransaction():
+    resultsTransactions = getTransactions()
+    return resultsTransactions
     
-
 # Plot it
-def plotIt2():
-    nx.draw(G,node_size=2,font_size=8, with_labels=False)
-    plt.show()
-    plt.savefig("path1.png")
+def plotIt( resultsTransactions ):
+    red = (1,0,0,1)
+    blue = (0,0,1,1)
+    
+    vprop = g.new_vertex_property("string")
+    
+    plot_color = g.new_vertex_property('vector<double>')
+    g.vertex_properties['plot_color'] = plot_color
+    
+    
+    
+    for i in resultsTransactions:
+        transactionsOutput = getOutputByTransID(i[0])
+        
+        v1 = g.add_vertex()
+        vprop[v1] = i[0]
+        plot_color[v1] = blue
+        
+        
+        for n in transactionsOutput:
+            v2 = g.add_vertex()
+            
+            vprop[v2] = n[0]
+            plot_color[v2] = red
+            
+            g.add_edge(v2, v1)
+            
+            
+        transactionsInput = getInputByTransID(i[0])
+        
+        for n in transactionsInput:
+            v2 = g.add_vertex()
+            
+            vprop[v2] = n[0]
+            plot_color[v2] = red
+            
+            g.add_edge(v1, v2)
+            
+    
+    g.vertex_properties["name"]=vprop
 
-
-"""uild a dataframe with 4 connections
-df = pd.DataFrame({ 'from':['A', 'B', 'C','A'], 'to':['D', 'A', 'E','C']})
-df
- 
-# Build your graph
-G=nx.from_pandas_edgelist(df, 'from', 'to')
-
-
-"""
+    graph_draw(g,
+               graph_tool.draw.sfdp_layout(g),
+               vertex_size=3, 
+               vertex_color=g.vertex_properties['plot_color'],
+               vertex_fill_color = g.vertex_properties['plot_color'],
+               bg_color=[1,1,1,1],
+               output_size=(1000, 1000),
+               output="two-nodes.png")

@@ -6,9 +6,12 @@ Bearbeiter: Nikola
 """
 import SQLdriver
 
-def getAllInputTransactions():
+def getInputByTransID( transID ):
+    curser = openConnection()
+    sqlQuery = 'SELECT FKpublicKey FROM projectBitcoin.Input \
+    WHERE FKtransactionID = "' + transID + '";'
     
-    selectString = 'SELECT * FROM transactionsInput, wallet, transaction WHERE ftransactionID.FKtransactionID = ftransactionID.transactionID AND transactionsInput.FKpublicKey = wallet.publicKey;'
-    
-    getFromDatabase( selectString )
+    results = getFromDatabase( curser, sqlQuery )
+    closeConnection(curser)
+    return results
     

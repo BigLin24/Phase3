@@ -32,13 +32,12 @@ def getDataframe():
     resultsTransactions = getAllTransactions()
     
     for i in resultsTransactions:
-        n
-        
+
         fromWallet.append(i[0])
         toWallet.append(i[3])
         
-        fromWallet.append(i[0])
-        toWallet.append(i[3])
+        fromWallet.append(i[3])
+        toWallet.append(i[1])
         
         if i[2] == 0:
             satosis = 0

@@ -11,7 +11,7 @@ conn = sqlite3.connect('database.db')"""
 
 
 
-connection = mc.connect (host = "87.106.6.161",
+connection = mc.connect (host = "localhost",
                          user = "DBphase3",
                          passwd = "phase3DB",
                          db = "projectBitcoin")
