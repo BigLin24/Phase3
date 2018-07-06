@@ -19,3 +19,17 @@ def getOutputByTransID( transID ):
     return results
     
     
+
+def getOutputByInputAndTrans( publicKey, transID ):
+    curser = openConnection()
+    sqlQuery = 'SELECT Output.FKpublicKey, Input.FKpublicKey, Input.FKtransactionID \
+        FROM projectBitcoin.Output, projectBitcoin.Input \
+        WHERE Output.FKtransactionID = Input.FKtransactionID \
+        AND Input.FKtransactionID = "' + transID + '"\
+        AND Input.FKpublicKey = "' + publicKey + '";'
+        
+    results = getFromDatabase( curser, sqlQuery )
+    
+    closeConnection(curser)
+    
+    return results

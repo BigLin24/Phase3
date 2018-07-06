@@ -15,13 +15,11 @@ def getInputByTransID( transID ):
     closeConnection(curser)
     return results
 
-def getSameUser( inputPublicKey, transID ):
+def getTransactionWithInput():
     curser = openConnection()
-    sqlQuery = 'SELECT Output.FKpublicKey as Output, Input.FKpublicKey as Input, Output.FKtransactionID \
-    FROM projectBitcoin.Output, projectBitcoin.Input \
-    WHERE Output.FKtransactionID = Input.FKtransactionID \
-    AND Input.FKtransactionID = "'+ transID + '" \
-    AND Input.FKpublicKey = "'+ inputPublicKey + '";'
+    sqlQuery = 'SELECT FKpublicKey, transactionID \
+    FROM projectBitcoin.Transaction, projectBitcoin.Input \
+    WHERE Transaction.transactionID= Input.FKtransactionID;'
     
     results = getFromDatabase( curser, sqlQuery )
     closeConnection(curser)

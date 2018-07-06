@@ -16,3 +16,19 @@ def writeNewUserWallet( publicKey, userID ):
     results = writeToDatabase( curser, sqlQuery )
     closeConnection(curser)
     return results
+
+def getUserIDbyPublicKey( PublicKey ):
+    curser = openConnection()
+    sqlQuery ='SELECT Wallet.FKuserID, Input.FKpublicKey \
+        FROM projectBitcoin.Input, projectBitcoin.Wallet \
+        WHERE Input.FKpublicKey = Wallet.PublicKey \
+        AND Input.FKpublicKey = "' + PublicKey + '";'
+    
+    results = getFromDatabase( curser, sqlQuery )
+    closeConnection(curser)
+    
+    if not results:
+        return 1
+    else:
+        return results[0][0]
+    

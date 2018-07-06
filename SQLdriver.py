@@ -37,8 +37,6 @@ def writeToDatabase( curser, insertString ):
 def getFromDatabase( curser, selectString ):
     curser.execute( selectString )
     results = curser.fetchall()
-    for i in results:
-    	print(i)
     return results
     
     

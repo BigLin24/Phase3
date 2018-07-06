@@ -43,6 +43,10 @@ def getDataTransaction():
     resultsTransactions = getTransactions()
     return resultsTransactions
 
+def getAllUser():
+    results = getAllUserIDs()
+    return results
+
 
 def getDataTransWithInput():
     results = getTransactionWithInput()
@@ -94,48 +98,80 @@ def plotIt( resultsTransactions ):
 
     graph_draw(g,
                graph_tool.draw.sfdp_layout(g),
-               vertex_size=3, 
+               vertex_size=1, 
                vertex_color=g.vertex_properties['plot_color'],
                vertex_fill_color = g.vertex_properties['plot_color'],
                bg_color=[1,1,1,1],
                output_size=(1000, 1000),
                output="two-nodes.png")
 
-
-
-def searchSame(results):
+def setNewSameUser( results ):
     maxUserIDtemp = getLastUserID()
     maxUserID = maxUserIDtemp[0][0]
     
+    
     for i in results:
-        inputPublicKey = i[0]
+        inputPublicKey = i[0]        
         inputTransID = i[1]
+
+        users = getOutputByInputAndTrans( inputPublicKey, inputTransID )
         
-        userSame = getSameUser( inputPublicKey, inputTransID )
+        maxUserID = maxUserID + 1
+        writeNewUser(str(maxUserID))
+        print (len(users))
         
-        if len(userSame) >= 2:
-            maxUserID = maxUserID +1
-            writeNewUser(str(maxUserID))
+        for n in users:
+            print(n)
+            writeNewUserWallet( n[0], str(maxUserID ))
+        
+
+
+def getDataTransWithInput():
+    results = getTransactionWithInput()
+    return results
+
+# Plot it
+def plotItAufgabe3( results ):
+    red = (1,0,0,1)
+    blue = (0,0,1,1)
+    
+    vprop = g.new_vertex_property("string")
+    
+    plot_color = g.new_vertex_property('vector<double>')
+    g.vertex_properties['plot_color'] = plot_color
+    
+    
+    for i in results:
+        transOutput = getTransactionByUserID(str(i[0]))
+        print(transOutput)
+        
+        if len(transOutput) > 0:
+        
+            v1 = g.add_vertex()
+            vprop[v1] = transOutput[0][0]
+            plot_color[v1] = red
             
-            for n in userSame:
-                writeNewUserWallet( n[0], str(maxUserID) )
-        else:
-            print('Noting')
             
-
-        
-        
-        
-
-
+            v2 = g.add_vertex()
+            vprop[v2] = transOutput[0][3]
+            plot_color[v2] = blue
                 
-                
-                
+            g.add_edge(v2, v1)
 
+            v3 = g.add_vertex()
+            vprop[v3] = getUserIDbyPublicKey(str(transOutput[0][2]))
+            plot_color[v3] = red
+            
+            g.add_edge(v2, v3)
+            
+    
+    g.vertex_properties["name"]=vprop
 
-   
-
-    
-    
-    
-    
+    graph_draw(g,
+               graph_tool.draw.sfdp_layout(g),
+               vertex_size=3, 
+               vertex_color=g.vertex_properties['plot_color'],
+               vertex_fill_color = g.vertex_properties['plot_color'],
+               bg_color=[1,1,1,1],
+               output_size=(1000, 1000),
+               output="two-nodes.png")

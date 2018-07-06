@@ -30,17 +30,18 @@ def getTransactions():
     
     return results
 
-def getTransactionWithInput():
+def getTransactionByUserID( userID ):
     curser = openConnection()
-    sqlQuery = 'SELECT Input.FKpublicKey, Input.FKtransactionID \
-    FROM projectBitcoin.Input, projectBitcoin.Transaction \
-    WHERE Input.FKtransactionID  = transactionID;'
-    
+    sqlQuery = 'SELECT Wallet.FKuserID, Output.FKpublicKey, Input.FKpublicKey, Output.FKtransactionID, Wallet.FKuserID \
+        FROM projectBitcoin.Output, projectBitcoin.Input, projectBitcoin.Wallet \
+        WHERE Output.FKpublicKey = Wallet.PublicKey \
+        AND Input.FKtransactionID = Output.FKtransactionID \
+        AND Wallet.FKuserID = ' + userID + ';'
     results = getFromDatabase( curser, sqlQuery )
     
     closeConnection(curser)
     
     return results
-    
+
 
 

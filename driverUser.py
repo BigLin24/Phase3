@@ -23,4 +23,12 @@ def writeNewUser( userID ):
     closeConnection(curser)
     return results
 
+def getAllUserIDs():
+    curser = openConnection()
+    sqlQuery = 'SELECT userID FROM projectBitcoin.User;'
+    results = getFromDatabase( curser, sqlQuery )
+    closeConnection(curser)
+    return results
+
+
     
