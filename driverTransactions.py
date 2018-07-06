@@ -22,11 +22,25 @@ def getAllTransactions():
 
 def getTransactions():
     curser = openConnection()
-    sqlQuery = 'SELECT transactionID FROM projectBitcoin.Transaction LIMIT 100000;'
+    sqlQuery = 'SELECT transactionID FROM projectBitcoin.Transaction;'
     
     results = getFromDatabase( curser, sqlQuery )
     
     closeConnection(curser)
     
     return results
+
+def getTransactionWithInput():
+    curser = openConnection()
+    sqlQuery = 'SELECT Input.FKpublicKey, Input.FKtransactionID \
+    FROM projectBitcoin.Input, projectBitcoin.Transaction \
+    WHERE Input.FKtransactionID  = transactionID;'
+    
+    results = getFromDatabase( curser, sqlQuery )
+    
+    closeConnection(curser)
+    
+    return results
+    
+
 

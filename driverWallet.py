@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Fraegt ueber SQldriver die DB ab und "verwandelt die Daten in ein Array
-Bearbeiter: Daniel
+Created on Fri Jul  6 09:31:59 2018
+
+@author: biglin
 """
 import SQLdriver
 
-def getAllWallets():
+def writeNewUserWallet( publicKey, userID ):
     curser = openConnection()
-    sqlQuery = 'SELECT PublicKey FROM Wallet'
+    sqlQuery ='UPDATE projectBitcoin.Wallet \
+    SET FKuserID = (SELECT userID FROM projectBitcoin.User WHERE userID = ' + userID +' ) \
+    WHERE PublicKey = "' + publicKey + '";'
     
-    results = getFromDatabase( curser, sqlQuery )
-    
+    results = writeToDatabase( curser, sqlQuery )
     closeConnection(curser)
-    
     return results

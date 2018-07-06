@@ -22,6 +22,7 @@ import driverOutput
 import driverInput
 import driverTransactions
 import matplotlib
+import time
 
 g = Graph()
 
@@ -41,7 +42,12 @@ def getDataframe2():
 def getDataTransaction():
     resultsTransactions = getTransactions()
     return resultsTransactions
-    
+
+
+def getDataTransWithInput():
+    results = getTransactionWithInput()
+    return results
+
 # Plot it
 def plotIt( resultsTransactions ):
     red = (1,0,0,1)
@@ -53,33 +59,35 @@ def plotIt( resultsTransactions ):
     g.vertex_properties['plot_color'] = plot_color
     
     
-    
     for i in resultsTransactions:
         transactionsOutput = getOutputByTransID(i[0])
-        
-        v1 = g.add_vertex()
-        vprop[v1] = i[0]
-        plot_color[v1] = blue
-        
-        
-        for n in transactionsOutput:
-            v2 = g.add_vertex()
-            
-            vprop[v2] = n[0]
-            plot_color[v2] = red
-            
-            g.add_edge(v2, v1)
-            
-            
         transactionsInput = getInputByTransID(i[0])
         
-        for n in transactionsInput:
-            v2 = g.add_vertex()
+        if len(transactionsOutput) + len(transactionsInput) > 10:
+        
+            v1 = g.add_vertex()
+            vprop[v1] = i[0]
+            plot_color[v1] = blue
             
-            vprop[v2] = n[0]
-            plot_color[v2] = red
             
-            g.add_edge(v1, v2)
+            for n in transactionsOutput:
+                v2 = g.add_vertex()
+                
+                vprop[v2] = n[0]
+                plot_color[v2] = red
+                
+                g.add_edge(v2, v1)
+                
+                
+            
+            
+            for n in transactionsInput:
+                v2 = g.add_vertex()
+                
+                vprop[v2] = n[0]
+                plot_color[v2] = red
+                
+                g.add_edge(v1, v2)
             
     
     g.vertex_properties["name"]=vprop
@@ -92,3 +100,42 @@ def plotIt( resultsTransactions ):
                bg_color=[1,1,1,1],
                output_size=(1000, 1000),
                output="two-nodes.png")
+
+
+
+def searchSame(results):
+    maxUserIDtemp = getLastUserID()
+    maxUserID = maxUserIDtemp[0][0]
+    
+    for i in results:
+        inputPublicKey = i[0]
+        inputTransID = i[1]
+        
+        userSame = getSameUser( inputPublicKey, inputTransID )
+        
+        if len(userSame) >= 2:
+            maxUserID = maxUserID +1
+            writeNewUser(str(maxUserID))
+            
+            for n in userSame:
+                writeNewUserWallet( n[0], str(maxUserID) )
+        else:
+            print('Noting')
+            
+
+        
+        
+        
+
+
+                
+                
+                
+
+
+   
+
+    
+    
+    
+    
